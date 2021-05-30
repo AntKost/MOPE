@@ -71,9 +71,16 @@ class Lab2:
         self.Ruv_3 = abs(self.TETAuv_3 - 1) / self.main_deviation
 
         if not self.check_homogeneity():
-            print(f'\n Дісперсія неоднорідна! Змінимо m={self.N} to m={self.N + 1}\n')
-            self.N += 1
-            self.add()
+            if self.N < 20:
+                print(f'\n Дісперсія неоднорідна! Змінимо m={self.N} to m={self.N + 1}\n')
+                self.N += 1
+                self.add()
+            else:
+                print("Дісперсія неоднорідна! Сгенеруємо іншу матрицю планування для m=5")
+                self.matrix23()
+                self.exp()
+                self.calculate()
+                self.print()
 
     def add(self):
         for i in range(3):

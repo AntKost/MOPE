@@ -5,7 +5,7 @@ from _pydecimal import Decimal
 from itertools import compress
 import math
 from scipy.stats import f, t
-
+import timeit
 #                      x1  x2  x3    x12 x13 x23    x123
 norm_factors_table = [[-1, -1, -1,   +1, +1, +1,    -1],
                       [-1, +1, +1,   -1, -1, +1,    -1],
@@ -172,10 +172,12 @@ def get_student_value(f3, q):
 def get_fisher_value(f3,f4, q):
     return Decimal(abs(f.isf(q,f4,f3))).quantize(Decimal('.0001')).__float__()
 
-
+start_time = timeit.default_timer()
 while not cochran_criteria(M, 4, y_arr):
     M += 1
     y_table = [[r.randint(y_min, y_max) for _ in range(M)] for j in range(N)]
+finish_time = timeit.default_timer()
+t1 = finish_time - start_time
 print("Матриця планування:")
 labels_table = list(map(lambda x: x.ljust(6),
                         ["x1", "x2", "x3", "x12", "x13", "x23", "x123"] + ["y{}".format(i + 1) for i in range(M)]))
@@ -185,6 +187,13 @@ print((" ").join(labels_table))
 print("\n".join([" ".join(map(lambda j: "{:<+6}".format(j), rows_table[i])) for i in range(len(rows_table))]))
 print("\t")
 norm_factors_table_zero_factor = [[+1] + i for i in norm_factors_table]
+start_time = timeit.default_timer()
 importance = student_criteria(M, N, y_arr, norm_factors_table_zero_factor)
+finish_time = timeit.default_timer()
+t2 = finish_time - start_time
+start_time = timeit.default_timer()
 fisher_criteria(M, N, 1, factors_table, y_arr, natural_bi, importance)
+finish_time = timeit.default_timer()
+t3 = finish_time - start_time
+print("\nЧас виконання кожної статистичної перевірки: \nПеревірка за критерієм Кохрена - {} секунд \nПеревірка за критерієм Стьюдента - {} секунд \nПеревірка за критерієм Фішера - {} секунд".format(round(t1,5),round(t2,5),round(t3,5)))
 print("\nВиконав: студент групи ІО-92 Костюк Антон   Варіант 212")

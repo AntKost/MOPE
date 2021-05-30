@@ -5,6 +5,7 @@ from scipy.stats import f, t
 from functools import reduce
 from itertools import compress
 import numpy as np
+import timeit
 
 
 raw_naturalized_factors_table = [[-3, 0, -6],
@@ -175,10 +176,11 @@ N = 15
 ymin = 197
 ymax = 205
 y_arr = [[random.randint(ymin, ymax) for _ in range(m)] for _ in range(N)]
+start_time = timeit.default_timer()
 while not cochran_criteria(m, N, y_arr):
     m+=1
     y_arr = [[random.randint(ymin, ymax) for _ in range(m)] for _ in range(N)]
-
+finish_time = timeit.default_timer()
 y_i = np.array([np.average(row) for row in y_arr])
 
 coefficients = [[m_ij(x_i(column)*x_i(row)) for column in range(11)] for row in range(11)]
@@ -191,4 +193,7 @@ beta_coefficients = np.linalg.solve(coefficients, free_values)
 importance = student_criteria(m, N, y_arr, beta_coefficients)
 d = len(list(filter(None, importance)))
 fisher_criteria(m, N, d, naturalized_factors_table, y_arr, beta_coefficients, importance)
+
+if finish_time-start_time > 0.1:
+    print("РОБИМО ВИСНОВОК - МОДЕЛЬ НЕАДЕКВАТНА")
 print("\nВиконав: студент групи ІО-92 Костюк Антон    Варіант 212")

@@ -137,6 +137,10 @@ class Lab3:
         q = 0.05
         t = float(student_table.col_values(3)[f3].replace(",", "."))
         self.importance = [True if el > t else False for el in list(t_i)]
+        self.count = 0
+        for i in self.importance:
+            if not i:
+                self.count += 1
         # print result data
         print("f3 = {} q = {} tтабл = {}".format(f3, q, t))
         beta_i = ["β{}".format(i) for i in range(N)]
@@ -150,6 +154,7 @@ class Lab3:
         self.d = len(betas_to_print)
         self.factors_table2 = [np.array([1] + list(i)) for i in self.naturalized_factors_table]
         self.fisher_criteria(self.m, self.N, 1, self.factors_table2, self.matrix, self.b_coefficients, self.importance)
+
 
     def calculate_theoretical_y(self, x_table, b_coefficients, importance):
         x_table = [list(itertools.compress(row, importance)) for row in x_table]
@@ -178,5 +183,9 @@ class Lab3:
         f_t = float((fisher_table.row_values(f3) if f3 <= 30 else fisher_table.row_values(30))[f4].replace(",", "."))
         print("Fp = {}, Ft = {}".format(f_p, f_t))
         print("Fp < Ft => модель адекватна" if f_p < f_t else "Fp > Ft => модель неадекватна")
+        print("*"*80)
+        print("Додаткове завдання:\nКількість не значимих коефіцієнтів = {}".format(self.count))
+        print("*" * 80)
         print("\nВиконав: студент групи ІО-92 Костюк Антон    Варіант 212")
+
 Lab3()

@@ -35,11 +35,14 @@ def optimal(a_Y, Y):
     opt = []
     for i in range(8):
         opt.append(Y[i] - Y2)
-    return opt
+    opt2 = Y
+    return opt, opt2
 
 def check(optimal):
     return min((a,i) for i, a in enumerate(optimal) if a>0)[1]
 
+def check2(optimal2):
+    return min((a,i) for i, a in enumerate(optimal2))[1]
 
 # -------------------------------------------------------------- #
 
@@ -60,10 +63,11 @@ Xn3 = calculate_xni(X03, Dx3, x3)
 Y2 = calculate_Y(X01, X02, X03)
 
 a_Y = average_Y(Y)
-opt = optimal(a_Y, Y)
+opt, opt2 = optimal(a_Y, Y)
 index = check(opt)
-
+index2 = check2(opt2)
 OPT_POINT = [x1[index], x2[index], x3[index]]
+OPT_POINT2 = [x1[index2], x2[index2], x3[index2]]
 
 
 print("A0 = {0}  A1 = {1}  A3 = {2}  A4 = {3}".format(A0, A1, A2, A3))
@@ -80,6 +84,8 @@ print(f"Dx| {Dx1:^4} {Dx2:^4} {Dx3:^4}|")
 print(f"\nЕталонне Yет: = {A0} + {A1}*x01 + {A2}*x02 + {A3}*x03" )
 print(f"\nФункція: Y = {A0} + {A1}*x1 + {A2}*x2 + {A3}*x3")
 print("Оптимальна точка плану(Критерій оптимальності - (Yет<-)):  Y({0}, {1}, {2}) = {3}".format(*OPT_POINT, "%.1f" % Y[index]))
-
+print("-"*80)
+print("Додаткове завдання:\nОптимальна точка плану(Критерій оптимальності - min(Y)):  Y({0}, {1}, {2}) = {3}".format(*OPT_POINT2, "%.1f" % Y[index2]))
+print("-"*80)
 print("\nВиконав: студент групи ІО-92 Костюк Антон   Варіант 212")
 
